@@ -31,6 +31,10 @@ State MotionPlanner::get_goal_state_in_ego_frame(const State& ego_state,
   auto cos_theta = std::cos(theta_rad);
   auto sin_theta = std::sin(theta_rad);
 
+  // Rotate the goal state in the new frame.
+  // 1x2 times 2x2 matrix multiplication
+  // [goal_state_ego_frame.location.x goal_state_ego_frame.location.y] * [[cos(theta) -sin(theta)]
+  //                 [sin(theta)  cos(theta)]]
   goal_state_ego_frame.location.x =
       cos_theta * goal_state_ego_frame.location.x -
       sin_theta * goal_state_ego_frame.location.y;
@@ -42,7 +46,7 @@ State MotionPlanner::get_goal_state_in_ego_frame(const State& ego_state,
   // current ego yaw from the goal waypoint heading/yaw.
   goal_state_ego_frame.rotation.yaw += theta_rad;
 
-  // Ego speed is the same in both coordenates
+  // Ego speed is the same in both coordinates
   // the Z coordinate does not get affected by the rotation.
 
   // Let's make sure the yaw is within [-180, 180] or [-pi, pi] so the optimizer
@@ -74,7 +78,7 @@ std::vector<State> MotionPlanner::generate_offset_goals_global_frame(
 
 std::vector<State> MotionPlanner::generate_offset_goals(
     const State& goal_state) {
-  // Now we need to gernerate "_num_paths" goals offset from the center goal at
+  // Now we need to generate "_num_paths" goals offset from the center goal at
   // a distance "_goal_offset".
   std::vector<State> goals_offset;
 
@@ -85,6 +89,7 @@ std::vector<State> MotionPlanner::generate_offset_goals(
   // TODO-Perpendicular direction: ADD pi/2 to the goal yaw
   // (goal_state.rotation.yaw)
   //auto yaw = ;  // <- Fix This
+  auto yaw = goal_state.rotation.yaw + M_PI / 2;
 
   // LOG(INFO) << "MAIN GOAL";
   // LOG(INFO) << "x: " << goal_state.location.x << " y: " <<
@@ -111,6 +116,9 @@ std::vector<State> MotionPlanner::generate_offset_goals(
     // std::cos(yaw_plus_90) and std::sin(yaw_plus_90)
     // goal_offset.location.x += ;  // <- Fix This
     // goal_offset.location.y += ;  // <- Fix This
+    goal_offset_location.x += offset * std::cos(yaw);
+    goal_offset_location.y += offset * std::sin(yaw);
+
     // LOG(INFO) << "x: " << goal_offset.location.x
     //          << " y: " << goal_offset.location.y
     //          << " z: " << goal_offset.location.z
