@@ -362,7 +362,8 @@ double VelocityProfileGenerator::calc_distance(const double& v_i,
     // v_i (initial velocity) to v_f (final velocity) at a constant
     // acceleration/deceleration "a". HINT look at the description of this
     // function. Make sure you handle div by 0
-    d = 0;  // <- Update
+    // d = 0;  // <- Update
+    d = (v_f * v_f - v_i * v_i) / (2 * a);
   }
   return d;
 }
@@ -373,7 +374,7 @@ acceleration across a given distance, with initial speed v_i.
 Make sure to check the discriminant of the radical. If it is negative,
 return zero as the final speed.
 Inputs : v_i - the initial speed in m / s.
-v_f - the ginal speed in m / s.
+v_f - the final speed in m / s.
 a - the acceleration in m / s ^ 2.
 */
 double VelocityProfileGenerator::calc_final_speed(const double& v_i,
@@ -385,7 +386,9 @@ double VelocityProfileGenerator::calc_final_speed(const double& v_i,
   // and make v_f = 0 in that case. If the discriminant is inf or nan return
   // infinity
 
-  double disc = 0;  // <- Fix this
+  // double disc = 0;  // <- Fix this
+  double disc = v_i * v_i + 2 * a * d;
+
   if (disc <= 0.0) {
     v_f = 0.0;
   } else if (disc == std::numeric_limits<double>::infinity() ||
