@@ -218,8 +218,8 @@ State BehaviorPlannerFSM::state_transition(const State& ego_state, State goal,
       // TODO-move to FOLLOW_LANE state: What state do we want to move to, when
       // we are "done" at the STOPPED state?
       //_active_maneuver = ;  // <- Fix This
+        _active_maneuver = FOLLOW_LANE;
       // LOG(INFO) << "BP - changing to FOLLOW_LANE";
-      get_active_maneuver = FOLLOW_LANE;
     }
   }
   _goal = goal;
