@@ -116,8 +116,8 @@ std::vector<State> MotionPlanner::generate_offset_goals(
     // std::cos(yaw_plus_90) and std::sin(yaw_plus_90)
     // goal_offset.location.x += ;  // <- Fix This
     // goal_offset.location.y += ;  // <- Fix This
-    goal_offset_location.x += offset * std::cos(yaw);
-    goal_offset_location.y += offset * std::sin(yaw);
+    goal_offset.location.x += offset * std::cos(yaw);
+    goal_offset.location.y += offset * std::sin(yaw);
 
     // LOG(INFO) << "x: " << goal_offset.location.x
     //          << " y: " << goal_offset.location.y
